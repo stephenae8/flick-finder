@@ -1,4 +1,5 @@
 $(document).ready(() => {
+    getMovies('wind');
     $('#searchForm').on('submit', (e) => {
         const searchText = $('#searchText').val();
         getMovies(searchText);
