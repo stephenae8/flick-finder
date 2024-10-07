@@ -17,6 +17,7 @@
     flex-direction: column;
 }
 }
+
 .card-title {
     flex-grow: 1;
     display: -webkit-box;
@@ -26,4 +27,10 @@
 }
 #mainBody {
     padding-top: 65px;
+}
+#titleBox {
+    /* padding-top: 0px; */
+}
+.ratings {
+    margin-bottom: ;
 }

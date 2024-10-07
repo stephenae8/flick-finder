@@ -1,5 +1,5 @@
 $(document).ready(() => {
-    getMovies('wind');
+    getMovies('strange');
     $('#searchForm').on('submit', (e) => {
         const searchText = $('#searchText').val();
         getMovies(searchText);
@@ -23,6 +23,7 @@ const API_KEY = '9dc0362c';
 function getMovies(searchText) {
     axios.get('http://www.omdbapi.com/?apikey=' + API_KEY + '&s=' + searchText)
     .then((response) => {
+        console.log(response)
         let movies = response.data.Search;
         let output = '';
         $.each(movies, (index, movie) => {
@@ -32,7 +33,7 @@ function getMovies(searchText) {
                     <div class="card-img-top-wrapper">
                         <img src="${movie.Poster}" class="card-img-top" alt="${movie.Title} poster">
                     </div>
-                    <div class="card-body d-flex flex-column">
+                    <div class="card-body d-flex flex-column" id="titleBox">
                         <h5 class="card-title flex-grow-1">${movie.Title}<h5>
                         <a href="#" class="btn btn-primary movie-details" data-imdbid="${movie.imdbID}">More Details</a>
                     </div>
@@ -50,6 +51,7 @@ function getMovies(searchText) {
 function movieSelected(imdbID) {
     axios.get('http://www.omdbapi.com/?apikey=' + API_KEY + '&i=' + imdbID)
     .then((response) => {
+        console.log(response)
         let movie = response.data;
         let movieDetails = `
             <div class="modal-header">
@@ -75,6 +77,10 @@ function movieSelected(imdbID) {
                 </div>
             </div>
             <div class="modal-footer">
+                    <div class="ratings">
+                        <span class="badge bg-secondary"><img src="https://cdn-icons-png.flaticon.com/512/590/590779.png" height="15px" alt="Movie Icon"> ${movie.Ratings[1] ? movie.Ratings[1].Value : 'N/A' }</span>
+                        <span class="badge bg-secondary"><img src="https://cdn-icons-png.flaticon.com/512/7656/7656139.png" height="15px" alt="Movie Icon"> ${movie.Ratings[0] ? movie.Ratings[0].Value : 'N/A'}</span>
+                    </div>
                 <a href="http://imdb.com/title/${movie.imdbID}" target="_blank"><button type="button" class="btn btn-primary">View IMDb</button></a>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
