@@ -18,42 +18,80 @@ $(document).on('click', '.movie-details', function(e) {
     movieSelected(imdbID);
 });
 
-const API_KEY = '9dc0362c';
+$('#searchButton').click(function(e) {
+    console.log('button clicked')
+    e.preventDefault();
+    const searchText = $('#searchText').val();
+    getMovies(searchText);
+})
 
-function getMovies(searchText) {
-    axios.get('http://www.omdbapi.com/?apikey=' + API_KEY + '&s=' + searchText)
-    .then((response) => {
-        console.log(response)
-        let movies = response.data.Search;
+const API_KEY = '9dc0362c';
+const MAX_RESULTS = 30;
+
+async function getMovies(searchText) {
+    try {
+        let allMovies = [];
+        let page = 1;
+
+        while (allMovies.length < MAX_RESULTS) {
+            const response = await axios.get(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchText}&page=${page}`);
+            console.log(response);
+
+            if (response.data.Response === "True") {
+                allMovies = [...allMovies, ...response.data.Search];
+                if (allMovies.length >= MAX_RESULTS || response.data.Search.length < 1) {
+                    break;
+                }
+                page++;
+            } else {
+                break;
+            }
+        }
+
         let output = '';
-        $.each(movies, (index, movie) => {
+        $.each(allMovies, (index, movie) => {
             output += `
-            <div class=" col-md-4 col-lg-3 mb-4">
+            <div class="col-md-6 col-md-4 col-lg-3 mb-4">
                 <div class="card h-100 d-flex flex-column text-center">
                     <div class="card-img-top-wrapper">
-                        <img src="${movie.Poster}" class="card-img-top" alt="${movie.Title} poster">
+                        <img src="${movie.Poster === 'N/A' ? 'https://www.popcorn.app/assets/app/images/placeholder-movieimage.png' : movie.Poster}" class="card-img-top" alt="${movie.Title} poster">
                     </div>
                     <div class="card-body d-flex flex-column" id="titleBox">
-                        <h5 class="card-title flex-grow-1">${movie.Title}<h5>
+                        <h5 class="card-title flex-grow-1">${movie.Title}</h5>
                         <a href="#" class="btn btn-primary movie-details" data-imdbid="${movie.imdbID}">More Details</a>
                     </div>
                 </div>
             </div>
             `;
         });
-        $('#movies').html(output);
-    })
-    .catch((err) => {
-        console.log(err)
-    });
-}
 
-function movieSelected(imdbID) {
+        $('#movies').html(output);
+    } catch (err) {
+        console.log(err);
+    }
+}
+async function movieSelected(imdbID) {
+    var movieModal = new bootstrap.Modal(document.getElementById('movieModal'));
+    let movieDetails = `
+        <div class="modal-header">
+            <h5 class="modal-title" id="movieModalLabel">Loading...</h5>
+        </div>
+        <div class="modal-body text-center">
+            <div class="loading-spinner">
+                <img src="images/icons8-loading.gif" alt="Loading icon">
+            </div>
+            <p class="mt-3">Fetching movie details...</p>
+        </div>
+    `;
+    $('#movieDetails').html(movieDetails);
+    movieModal.show();
+
+
     axios.get('http://www.omdbapi.com/?apikey=' + API_KEY + '&i=' + imdbID)
     .then((response) => {
         console.log(response)
         let movie = response.data;
-        let movieDetails = `
+        movieDetails = `
             <div class="modal-header">
                 <h5 class="modal-title" id="movieModalLabel">${movie.Title}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -61,7 +99,7 @@ function movieSelected(imdbID) {
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <img src="${movie.Poster}" class="img-fluid" alt="${movie.Title} poster">
+                        <img src="${movie.Poster === 'N/A' ? 'https://www.popcorn.app/assets/app/images/placeholder-movieimage.png' : movie.Poster}" class="card-img-top" alt="${movie.Title} poster">
                     </div>
                     <div class="col-md-8">
                         <ul class="list-group">
@@ -86,8 +124,6 @@ function movieSelected(imdbID) {
             </div>
         `;
         $('#movieDetails').html(movieDetails);
-        var movieModal = new bootstrap.Modal(document.getElementById('movieModal'));
-        movieModal.show();
     })
     .catch((err) => {
         console.log(err);
