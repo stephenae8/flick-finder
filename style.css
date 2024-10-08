@@ -30,8 +30,12 @@
         width: 330px;
     }
 }
+#brandName {
+    margin-right: 5px;
+}
 #searchForm {
     margin-right: -13px;
+    margin-left: -13px;
 }
 .loadButton {
     display: flex;
@@ -43,4 +47,7 @@
     @media(min-width: 767px) {
     margin-top: 200px;
     }
+}
+#searchButton {
+    margin-right: 5px;
 }
