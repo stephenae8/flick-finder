@@ -39,7 +39,6 @@
 }
 .loadButton {
     display: flex;
-    justify-content: center;
 }
 #loadButton {
     width: 330px;
@@ -49,5 +48,5 @@
     }
 }
 #searchButton {
-    margin-right: 5px;
+    margin-right: 3px;
 }

@@ -41,7 +41,14 @@ $(document).on('click', '.movie-details', function(e) {
 $('#searchButton').click(function(e) {
     e.preventDefault();
     const searchText = $('#searchText').val();
-    getMovies(searchText);
+    if($('#watchedMovies').is(':visible')) {
+        $('#watchedMovies').hide();
+        $('#movies').show();
+        getMovies(searchText);
+    } else{
+
+        getMovies(searchText);
+    }
 });
 
 $(document).on('click', '#loadButton', function(e) {
@@ -50,6 +57,13 @@ $(document).on('click', '#loadButton', function(e) {
     const searchText = $('#searchText').val();
     loadMoreMovies(searchText);
 });
+
+function showToast(message) {
+    $('#toastMessage').text(message);  // Set the toast message
+
+    var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));  // Initialize the toast
+    toastElement.show();  // Show the toast
+}
 
 const API_KEY = '9dc0362c';
 const MAX_RESULTS = 30;
@@ -108,8 +122,8 @@ function displayMovies() {
                 <div class="card-body d-flex flex-column" id="titleBox">
                     <h5 class="card-title flex-grow-1">${movie.Title}</h5>
                     <div class="btn-group" role="group">
-                        <a href="#" class="btn btn-primary movie-details" data-imdbid="${movie.imdbID}">More Details</a>
-                        <button class="btn btn-success add-to-watched" data-imdbid="${movie.imdbID}">Add to Watched</button>
+                        <a href="#" class="btn btn-dark movie-details" data-imdbid="${movie.imdbID}">More Details</a>
+                        <button class="btn btn-primary add-to-watched" data-imdbid="${movie.imdbID}">Add to Watched</button>
                     </div>
                 </div>
             </div>
@@ -157,13 +171,13 @@ async function addToWatched(imdbID) {
             };
             
             localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
-            alert('Movie added to Watched list!');
+            showToast('Movie added to Watched list!');
         } catch (error) {
             console.error('Error fetching movie details:', error);
-            alert('Failed to add movie to Watched list. Please try again.');
+            showToast('Failed to add movie to Watched list. Please try again.');
         }
     } else {
-        alert('This movie is already in your Watched list!');
+        showToast('This movie is already in your Watched list!');
     }
 }
 
@@ -182,7 +196,7 @@ function displayWatchedMovies() {
                 <div class="card-body d-flex flex-column" id="titleBox">
                     <h5 class="card-title flex-grow-1">${movie.Title}</h5>
                     <div class="btn-group" role="group">
-                        <a href="#" class="btn btn-primary movie-details" data-imdbid="${movie.imdbID}">More Details</a>
+                        <a href="#" class="btn btn-dark movie-details" data-imdbid="${movie.imdbID}">More Details</a>
                         <button class="btn btn-danger remove-from-watched" data-imdbid="${movie.imdbID}">Remove</button>
                     </div>
                 </div>
@@ -200,7 +214,7 @@ function removeFromWatched(imdbID) {
         delete watchedMovies[imdbID];
         localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
         displayWatchedMovies();
-        alert('Movie removed from Watched list!');
+        showToast('Movie removed from Watched list!');
     }
 }
 
