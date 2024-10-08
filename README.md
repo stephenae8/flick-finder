@@ -53,8 +53,9 @@
 
 ## 🎥 Screenshots
 
-<p align="center"><img width="730px" src="images/flick-findr-search.png"></p>
-<p align="center"><img width="730px" src="images/flick-findr-modal.png"></p>
+<p align="center"><img width="730px" src="images/flick-findr-search-2.png"></p>
+<p align="center"><img width="730px" src="images/flick-findr-modal-2.png"></p>
+<p align="center"><img width="730px" src="images/flick-findr-watched.png"></p>
 
 ## 📦 Dependencies
 
