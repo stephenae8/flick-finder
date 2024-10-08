@@ -59,10 +59,10 @@ $(document).on('click', '#loadButton', function(e) {
 });
 
 function showToast(message) {
-    $('#toastMessage').text(message);  // Set the toast message
+    $('#toastMessage').text(message);
 
-    var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));  // Initialize the toast
-    toastElement.show();  // Show the toast
+    var toastElement = new bootstrap.Toast(document.getElementById('liveToast')); 
+    toastElement.show();
 }
 
 const API_KEY = '9dc0362c';
@@ -155,7 +155,6 @@ async function addToWatched(imdbID) {
             const response = await axios.get(`http://www.omdbapi.com/?apikey=${API_KEY}&i=${imdbID}`);
             const movieData = response.data;
             
-            // Store only the necessary data
             watchedMovies[imdbID] = {
                 Title: movieData.Title,
                 Year: movieData.Year,
