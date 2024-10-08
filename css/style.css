@@ -16,6 +16,7 @@
     flex-direction: column;
 }
 }
+
 .card-title {
     flex-grow: 1;
     display: -webkit-box;
@@ -27,5 +28,19 @@
     padding-top: 65px;
     @media(max-width: 768px){
         width: 330px;
+    }
+}
+#searchForm {
+    margin-right: -13px;
+}
+.loadButton {
+    display: flex;
+    justify-content: center;
+}
+#loadButton {
+    width: 330px;
+    height: 55px;
+    @media(min-width: 767px) {
+    margin-top: 200px;
     }
 }
